@@ -21,16 +21,13 @@ protocol StationScheduleServiceProtocol {
 final class StationScheduleService: StationScheduleServiceProtocol {
 
     private let client: APIProtocol
-    private let apiKey: String
     
-    init(client: APIProtocol, apiKey: String) {
-        self.apiKey = apiKey
+    init(client: APIProtocol) {
         self.client = client
     }
     
     func getScheduleBetweenStations(from: String, to: String, date: Date?) async throws -> Schedule {
         let response = try await client.getScheduleBetweenStations(query: .init(
-            apikey: apiKey,
             from: from,
             to: to,
             date: date?.ISO8601Format()
@@ -41,7 +38,7 @@ final class StationScheduleService: StationScheduleServiceProtocol {
 
     func getStationSchedule(station: String, date: Date?) async throws -> StationSchedule {
         let response = try await client.getStationSchedule(query: .init(
-            apikey: apiKey,
+            
             station: station,
             date: date?.ISO8601Format()
         ))

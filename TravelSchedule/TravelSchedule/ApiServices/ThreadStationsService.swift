@@ -18,16 +18,13 @@ protocol ThreadStationsServiceProtocol {
 
 final class ThreadStationsService: ThreadStationsServiceProtocol {
     private let client: APIProtocol
-    private let apiKey: String
     
-    init(client: APIProtocol, apiKey: String) {
-        self.apiKey = apiKey
+    init(client: APIProtocol) {
         self.client = client
     }
     
     func getThreadStations(threadId: String, from: String?, to: String?, date: Date?) async throws -> ThreadStation {
         let response = try await client.getRouteStations(query: .init(
-            apikey: apiKey,
             uid: threadId,
             from: from,
             to: to,

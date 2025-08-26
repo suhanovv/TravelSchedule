@@ -18,17 +18,14 @@ protocol StationsServiceProtocol {
 
 final class StationsService: StationsServiceProtocol {
     private let client: APIProtocol
-    private let apiKey: String
+    private let jsonDecoder = JSONDecoder()
     
-    init(client: APIProtocol, apiKey: String) {
-        self.apiKey = apiKey
+    init(client: APIProtocol) {
         self.client = client
     }
     
     func getAllStations() async throws -> AllStations {
-        let response = try await client.getAllStations(query: .init(
-            apikey: apiKey
-        ))
+        let response = try await client.getAllStations(query: .init())
         
         var fullData = Data()
        
@@ -36,6 +33,6 @@ final class StationsService: StationsServiceProtocol {
             fullData.append(contentsOf: chunk)
         }
         
-        return try JSONDecoder().decode(AllStations.self, from: fullData)
+        return try jsonDecoder.decode(AllStations.self, from: fullData)
     }
 }

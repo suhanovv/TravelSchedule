@@ -9,8 +9,7 @@ final class CopyrightServiceFactory: BaseApiServiceFactory, ApiServiceFactoryPro
     
     func makeService() throws -> CopyrightServiceProtocol {
         CopyrightService(
-            client: try clientFactory.makeClient(),
-            apiKey: AppConfig.apiKey
+            client: try clientFactory.makeClient()
         )
     }
 }

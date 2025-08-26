@@ -9,8 +9,7 @@ final class NearestStationsServiceFactory: BaseApiServiceFactory, ApiServiceFact
     
     func makeService() throws -> NearestStationsServiceProtocol {
         NearestStationsService(
-            client: try clientFactory.makeClient(),
-            apiKey: AppConfig.apiKey
+            client: try clientFactory.makeClient()
         )
     }
 }

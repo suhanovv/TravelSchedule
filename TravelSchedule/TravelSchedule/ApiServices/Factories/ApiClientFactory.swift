@@ -15,7 +15,8 @@ final class ApiClientFactory: ApiClientFactoryProtocol {
     func makeClient() throws -> APIProtocol {
         Client(
             serverURL: try Servers.Server1.url(),
-            transport: URLSessionTransport()
+            transport: URLSessionTransport(),
+            middlewares: [AuthMiddleware(authKey: AppConfig.apiKey)]
         )
     }
 }

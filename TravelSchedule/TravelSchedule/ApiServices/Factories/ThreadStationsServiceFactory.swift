@@ -9,8 +9,7 @@ final class ThreadStationsServiceFactory: BaseApiServiceFactory, ApiServiceFacto
     
     func makeService() throws -> ThreadStationsServiceProtocol {
         ThreadStationsService(
-            client: try clientFactory.makeClient(),
-            apiKey: AppConfig.apiKey
+            client: try clientFactory.makeClient()
         )
     }
 }

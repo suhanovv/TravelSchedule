@@ -10,7 +10,6 @@ final class CarrierInfoServiceFactory: BaseApiServiceFactory, ApiServiceFactoryP
     func makeService() throws -> CarrierInfoServiceProtocol {
         CarrierInfoService(
             client: try clientFactory.makeClient(),
-            apiKey: AppConfig.apiKey
         )
     }
 }

@@ -9,8 +9,7 @@ final class StationScheduleServiceFactory: BaseApiServiceFactory, ApiServiceFact
     
     func makeService() throws -> StationScheduleServiceProtocol {
         StationScheduleService(
-            client: try clientFactory.makeClient(),
-            apiKey: AppConfig.apiKey
+            client: try clientFactory.makeClient()
         )
     }
 }
