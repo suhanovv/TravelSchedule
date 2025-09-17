@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct FiltersView: View {
-    @State private var viewModel: FilterViewModel
+    @Binding var filterModel: CarriersFilterModel
+    @State private var localFilterModel: CarriersFilterModel = .init()
+    @State private var viewModel: FiltersViewModel = .init()
     @Environment(\.dismiss) private var dismiss
-    
-    init(viewModel: FilterViewModel) {
-        self.viewModel = viewModel
-    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -28,6 +26,7 @@ struct FiltersView: View {
             .formStyle(.columns)
             Spacer()
             acceptButton
+                .opacity(viewModel.isFiltersChanged(localState: filterModel, globalState: localFilterModel) ? 1 : 0)
         }
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 24, trailing: 16))
         .background(.ypWhite)
@@ -39,6 +38,10 @@ struct FiltersView: View {
                         .foregroundStyle(.ypBlack)
                 }
             }
+        }
+        .onAppear {
+            localFilterModel.selectedTimes = filterModel.selectedTimes
+            localFilterModel.selectedTransitions = filterModel.selectedTransitions
         }
     }
     
@@ -54,9 +57,9 @@ struct FiltersView: View {
                 Text(timeType.rawValue)
                 Spacer()
                 Button(action: {
-                    viewModel.changeTimeFilter(timeType)
+                    localFilterModel.changeTimeFilter(timeType)
                 }) {
-                    Image(systemName: viewModel.selectedTimes.contains(timeType) ? "checkmark.square.fill" : "square")
+                    Image(systemName: localFilterModel.selectedTimes.contains(timeType) ? "checkmark.square.fill" : "square")
                         .foregroundStyle(.ypBlack)
                         .frame(width: 20, height: 20)
                     
@@ -77,9 +80,9 @@ struct FiltersView: View {
                 Text(transition.rawValue)
                 Spacer()
                 Button(action: {
-                    viewModel.changeTransitions(transition)
+                    localFilterModel.changeTransitions(transition)
                 }) {
-                    Image(systemName: viewModel.selectedTransitions == transition ? "circle.inset.filled" : "circle")
+                    Image(systemName: localFilterModel.selectedTransitions == transition ? "circle.inset.filled" : "circle")
                         .foregroundStyle(.ypBlack)
                         .frame(width: 20, height: 20)
                 }
@@ -89,7 +92,7 @@ struct FiltersView: View {
     
     private var acceptButton: some View {
         Button("Применить", action: {
-            viewModel.apply()
+            filterModel = localFilterModel
             dismiss()
         })
         .modifier(BoldSeventeen())
@@ -101,6 +104,6 @@ struct FiltersView: View {
 }
 
 #Preview {
-    let model = FilterViewModel(searchParams: ScheduleSearchParams())
-    FiltersView(viewModel: model)
+    @Previewable @State var model = CarriersFilterModel()
+    FiltersView(filterModel: $model)
 }

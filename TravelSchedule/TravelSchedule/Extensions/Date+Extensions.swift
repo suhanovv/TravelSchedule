@@ -20,11 +20,11 @@ extension Date {
         return formatter
     }()
     
-    func carriersListItemDateString() -> String {
+    var carriersListItemDateString: String {
         return Date.carriersListItemDateFormatter.string(from: self)
     }
     
-    func hoursAndMinutesString() -> String {
+    var hoursAndMinutesString: String {
         return Date.hoursAndMinutesFormatter.string(from: self)
     }
 }

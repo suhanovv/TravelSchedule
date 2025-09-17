@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct StationSelectionView: View {
-    @State var viewModel: StationSelectionViewModel
-    @Environment(\.dismiss) private var dismiss
+    let city: City
     @Binding var path: NavigationPath
     @Binding var selectedStation: Station?
+    @State private var viewModel = StationSelectionViewModel()
     
     var body: some View {
         List {
@@ -34,11 +34,10 @@ struct StationSelectionView: View {
             }
         }
         .overlay {
-            if viewModel.filteredStations.isEmpty {
-                Text("Станция не найдена")
-                    .modifier(BoldTwentyFour())
-                    .foregroundColor(.ypBlack)
-            }
+            Text("Станция не найдена")
+                .modifier(BoldTwentyFour())
+                .foregroundColor(.ypBlack)
+                .opacity(viewModel.filteredStations.isEmpty ? 1 : 0)
         }
         .searchable(
             text: $viewModel.searchStr,
@@ -52,9 +51,7 @@ struct StationSelectionView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
+                Button { path.removeLast() } label: {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(.ypBlack)
                 }
@@ -67,14 +64,13 @@ struct StationSelectionView: View {
                 .background(.ypWhite)
         }
         .onAppear {
-            viewModel.loadStations()
+            viewModel.loadStations(city: city)
         }
     }
 }
 
 #Preview {
     @Previewable @State var path = NavigationPath()
-    @Previewable @State var viewModel = StationSelectionViewModel(city: City(id: 1, name: "Test"))
     @Previewable @State var selectedStation: Station?
-    StationSelectionView(viewModel: viewModel, path: $path, selectedStation: $selectedStation)
+    StationSelectionView(city: City(id: 1, name: "Test"), path: $path, selectedStation: $selectedStation)
 }

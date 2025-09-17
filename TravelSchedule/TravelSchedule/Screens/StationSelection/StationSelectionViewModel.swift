@@ -9,19 +9,14 @@ import Foundation
 import Combine
 
 @Observable final class StationSelectionViewModel {
-    private var stations: [Station] = []
-    private let city: City
     var searchStr: String = ""
     var filteredStations: [Station] {
         !searchStr.isEmpty ? stations
             .filter { $0.name.lowercased().contains(searchStr.lowercased()) } : stations
     }
+    private var stations: [Station] = []
     
-    init(city: City) {
-        self.city = city
-    }
-    
-    func loadStations() {
+    func loadStations(city: City) {
         stations = [
             Station(id: 1, name: "Москва Ленинградский вокзал"),
                 Station(id: 2, name: "Москва Казанский вокзал"),

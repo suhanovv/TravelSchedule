@@ -11,21 +11,17 @@ enum ErrorType {
     case noInternet
     case serverError
     
-    func localizedDescription() -> String {
+    var localizedDescription: String {
         switch self {
-            case .noInternet:
-                return "Нет интернета"
-            case .serverError:
-                return "Ошибка сервера"
+            case .noInternet: "Нет интернета"
+            case .serverError: "Ошибка сервера"
         }
     }
     
-    func logo() -> ImageResource {
+    var logo: ImageResource {
         switch self {
-            case .noInternet:
-                return .noInternet
-            case .serverError:
-                return .serverError
+            case .noInternet: .noInternet
+            case .serverError: .serverError
         }
     }
 }
@@ -35,10 +31,10 @@ struct ErrorView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            Image(errorType.logo())
+            Image(errorType.logo)
                 .resizable()
                 .frame(width: 223, height: 223)
-            Text(errorType.localizedDescription())
+            Text(errorType.localizedDescription)
                 .modifier(BoldTwentyFour())
                 .foregroundStyle(.ypBlack)
         }

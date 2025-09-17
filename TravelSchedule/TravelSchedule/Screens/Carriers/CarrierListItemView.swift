@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct CarrierListItemView: View {
-    var carrier: CarrierListItem
+    let carrier: CarrierListItem
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,7 +19,7 @@ struct CarrierListItemView: View {
         .frame(height: 104)
         .background(Rectangle()
             .fill(.ypLightGrey)
-            .cornerRadius(24)
+            .clipShape(.rect(cornerRadius: 24))
         )
         .background(.ypWhite)
     }
@@ -36,13 +36,11 @@ struct CarrierListItemView: View {
                 .clipShape(.rect(cornerRadius: 12))
             VStack(alignment: .leading) {
                 HStack{
-                    Text(carrier.name)
-                        .modifier(RegularSeventeen())
+                    Text(carrier.name).modifier(RegularSeventeen())
                     
                     Spacer()
                     
-                    Text(carrier.startDate.carriersListItemDateString())
-                        .modifier(RegularTwelve())
+                    Text(carrier.formattedStartDate).modifier(RegularTwelve())
                 }
                 .foregroundStyle(.ypBlackUniversal)
                 
@@ -59,20 +57,18 @@ struct CarrierListItemView: View {
     
     private var bottomInfo: some View {
         HStack{
-            Text(carrier.formattedDepartureTime())
-                .modifier(RegularSeventeen())
+            Text(carrier.formattedDepartureTime).modifier(RegularSeventeen())
             VStack { Divider().overlay(.ypGrey) }
             
             Spacer()
             
-            Text(carrier.formatedDuration())
-                .modifier(RegularTwelve())
+            Text(carrier.formattedDuration).modifier(RegularTwelve())
             
             VStack { Divider().overlay(.ypGrey) }
             
             Spacer()
             
-            Text(carrier.arrivalTime.hoursAndMinutesString()).modifier(RegularSeventeen())
+            Text(carrier.formattedArrivalTime).modifier(RegularSeventeen())
                 
         }
         .foregroundStyle(.ypBlackUniversal)

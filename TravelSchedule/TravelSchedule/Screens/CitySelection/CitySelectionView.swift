@@ -10,14 +10,13 @@ import SwiftUI
 
 struct CitySelectionView: View {
     var routeDirectionType: RouteDirectionType
+    @Binding var path: NavigationPath
     @State private var viewModel = CitySelectionViewModel()
     @State private var isSearch: Bool = false
-    @Environment(\.dismiss) private var dismiss
-    @Binding var path: NavigationPath
     
     var body: some View {
         List {
-            ForEach(viewModel.filteredCities, id: \.id) { city in
+            ForEach(viewModel.filteredCities) { city in
                 ZStack {
                     HStack {
                         Text(city.name)
@@ -39,11 +38,10 @@ struct CitySelectionView: View {
             }
         }
         .overlay {
-            if viewModel.filteredCities.isEmpty {
-                Text("Город не найден")
-                    .modifier(BoldTwentyFour())
-                    .foregroundColor(.ypBlack)
-            }
+            Text("Город не найден")
+                .modifier(BoldTwentyFour())
+                .foregroundColor(.ypBlack)
+                .opacity(viewModel.filteredCities.isEmpty ? 1 : 0)
         }
         .searchable(
             text: $viewModel.searchStr,
@@ -58,7 +56,7 @@ struct CitySelectionView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button(action:{ dismiss() }) {
+                Button(action:{ path.removeLast() }) {
                     Image(systemName: "chevron.left")
                         .foregroundStyle(.ypBlack)
                 }

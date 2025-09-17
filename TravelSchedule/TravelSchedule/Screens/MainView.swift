@@ -9,20 +9,20 @@ import SwiftUI
 
 struct MainView: View {
     private let backgroundColor: Color = .ypWhite
-    @State private var scheduleSearchParams = ScheduleSearchParams()
     @State private var path = NavigationPath()
+    @State private var routeModel: RouteFormModel = .init()
+    @State private var filterModel: CarriersFilterModel = .init()
     
     var body: some View {
         NavigationStack(path: $path) {
             TabView() {
                 Group {
-                    sheduleTabView
+                    scheduleTabView
                     settingsTabView
                 }
                 .background(backgroundColor)
             }
             .tint(.ypBlack)
-            .environment(scheduleSearchParams)
             .navigationDestination(for: NavigationRoute.self) { screen in
                 switch screen {
                     case .citySelection(let directionType):
@@ -30,22 +30,22 @@ struct MainView: View {
                         
                     case .stationSelection(let directionType, let city):
                         StationSelectionView(
-                            viewModel: StationSelectionViewModel(city: city),
+                            city: city,
                             path: $path,
-                            selectedStation: directionType == .from ? $scheduleSearchParams.from : $scheduleSearchParams.to
+                            selectedStation: directionType == .from ? $routeModel.from : $routeModel.to
                         )
                         
-                    case .carriersList: CarriersListView(viewModel: CarriersListViewModel(searchParams: scheduleSearchParams))
+                    case .carriersList(let from, let to): CarriersListView(from: from, to: to, filterModel: $filterModel)
                     case .carrierInfo(let carrier): CarrierInfoView(carrier: carrier)
-                    case .filterScreen: FiltersView(viewModel: FilterViewModel(searchParams: scheduleSearchParams))
+                    case .filterScreen: FiltersView(filterModel: $filterModel)
                 }
             }
         }
     }
     
-    private var sheduleTabView: some View {
+    private var scheduleTabView: some View {
         VStack {
-            ScheduleView(searchParams: scheduleSearchParams)
+            ScheduleView(formModel: $routeModel)
             Spacer()
             Divider()
         }

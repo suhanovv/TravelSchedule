@@ -19,35 +19,32 @@ struct CarrierListItem: Identifiable, Hashable {
     let startDate: Date
     let transition: String?
     
-    func formatedDuration() -> String {
+    var formattedDuration: String {
         duration.formatted(.units(allowed: [.hours], width: .wide))
     }
     
-    func formattedDepartureTime() -> String {
-        departureTime.hoursAndMinutesString()
+    var formattedDepartureTime: String {
+        departureTime.hoursAndMinutesString
+    }
+    
+    var formattedStartDate: String {
+        startDate.carriersListItemDateString
+    }
+    
+    var formattedArrivalTime: String {
+        arrivalTime.hoursAndMinutesString
     }
 }
 
 @Observable final class CarriersListViewModel {
     private(set) var carriers: [CarrierListItem] = []
-    private(set) var searchParams: ScheduleSearchParams
-    var title: String {
-        if let from = searchParams.from, let to = searchParams.to {
-            return "\(from.name) → \(to.name)"
-        } else {
-            return "Не указано"
-        }
-    }
+
     
-    init(searchParams: ScheduleSearchParams) {
-        self.searchParams = searchParams
-    }
-    
-    func isAnyFilterActive() -> Bool {
-        !searchParams.selectedTimes.isEmpty || searchParams.selectedTransitions != nil
+    func makeTitle(from: Station, to: Station) -> String {
+        "\(from.name) → \(to.name)"
     }
 
-    func loadData() {
+    func loadData(from: Station, to: Station) {
         carriers = [
             .init(
                 id: UUID(),

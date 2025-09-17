@@ -10,7 +10,7 @@ import Foundation
 enum NavigationRoute: Hashable {
     case citySelection(RouteDirectionType)
     case stationSelection(RouteDirectionType, City)
-    case carriersList
+    case carriersList(Station, Station)
     case carrierInfo(CarrierListItem)
     case filterScreen
 }

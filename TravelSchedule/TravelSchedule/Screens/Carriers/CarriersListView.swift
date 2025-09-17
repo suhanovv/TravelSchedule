@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct CarriersListView: View {
-    @State var viewModel: CarriersListViewModel
+    let from: Station
+    let to: Station
+    @Binding var filterModel: CarriersFilterModel
+    @State private var viewModel: CarriersListViewModel = .init()
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -20,11 +23,10 @@ struct CarriersListView: View {
             filterButton
         }
         .overlay {
-            if (viewModel.carriers.isEmpty) {
-                Text("Вариантов нет")
-                    .modifier(BoldTwentyFour())
-                    .foregroundColor(.ypBlack)
-            }
+            Text("Вариантов нет")
+                .modifier(BoldTwentyFour())
+                .foregroundColor(.ypBlack)
+                .opacity(viewModel.carriers.isEmpty ? 1 : 0)
         }
         .padding([.horizontal, .top], 16)
         .background(.ypWhite)
@@ -38,12 +40,12 @@ struct CarriersListView: View {
             }
         }
         .onAppear {
-            viewModel.loadData()
+            viewModel.loadData(from: from, to: to)
         }
     }
     
     private var title: some View {
-        Text(viewModel.title)
+        Text(viewModel.makeTitle(from: from, to: to))
             .modifier(BoldTwentyFour())
             .foregroundStyle(.ypBlack)
     }
@@ -62,7 +64,6 @@ struct CarriersListView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
             
         }
-        
         .listStyle(.plain)
         .scrollIndicators(.hidden)
         .scrollBounceBehavior(.basedOnSize)
@@ -74,11 +75,11 @@ struct CarriersListView: View {
                 Text("Уточнить время")
                     .modifier(BoldSeventeen())
                     .foregroundColor(.white)
-                if viewModel.isAnyFilterActive() {
-                    Circle()
-                        .fill(.ypRed)
-                        .frame(width: 8, height: 8)
-                }
+                Circle()
+                    .fill(.ypRed)
+                    .frame(width: 8, height: 8)
+                    .opacity(filterModel.isAnyFilterActive ? 1 : 0)
+                
             }
             .frame(maxWidth: .infinity, maxHeight: 60)
             .background(RoundedRectangle(cornerRadius: 16)
@@ -90,10 +91,7 @@ struct CarriersListView: View {
 
 #Preview {
     
-    let carriersViewModel = CarriersListViewModel(
-        searchParams: ScheduleSearchParams(from: Station(id: 1, name: "test"), to: Station(id: 2, name: "test")))
-    
-    CarriersListView(viewModel: carriersViewModel)
-    
+    @Previewable @State var filterModel: CarriersFilterModel = .init()
+    CarriersListView(from: Station(id: 1, name: "test"), to: Station(id: 2, name: "test"), filterModel: $filterModel)
 }
 

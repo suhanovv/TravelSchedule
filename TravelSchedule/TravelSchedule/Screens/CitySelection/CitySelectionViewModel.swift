@@ -9,12 +9,12 @@ import Foundation
 import Combine
 
 @Observable final class CitySelectionViewModel {
-    private var cities: [City] = []
     var searchStr: String = ""
     var filteredCities: [City] {
         !searchStr.isEmpty ? cities
             .filter { $0.name.lowercased().contains(searchStr.lowercased()) } : cities
     }
+    private var cities: [City] = []
 
     func loadCities() {
         cities = [

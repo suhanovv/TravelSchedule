@@ -7,20 +7,42 @@
 
 import SwiftUI
 
+@Observable final class RouteFormModel {
+    var from: Station?
+    var to: Station?
+    var isFormValid: Bool {
+        from != nil && to != nil
+    }
+    var nameFrom: String? {
+        from?.name
+    }
+    
+    var nameTo: String? {
+        to?.name
+    }
+    
+    func swapFromTo() {
+        (from, to) = (to, from)
+    }
+}
+
 struct ScheduleView: View {
     private let cornerRadius: CGFloat = 20
-    @State private var viewModel: ScheduleViewModel
-    
-    init(searchParams: ScheduleSearchParams) {
-        viewModel = ScheduleViewModel(scheduleSearchParams: searchParams)
-    }
+    @Binding var formModel: RouteFormModel
     
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
             selectRouteWidget
-            if viewModel.isFormValid {
-                searchButton
+            if let from = formModel.from, let to = formModel.to {
+                NavigationLink(value: NavigationRoute.carriersList(from, to)) {
+                    Text("Найти")
+                        .modifier(BoldSeventeen())
+                        .frame(width: 150, height: 60)
+                        .foregroundColor(.white)
+                        .background(.ypBlue)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
             }
             Spacer()
         }
@@ -31,16 +53,16 @@ struct ScheduleView: View {
         HStack(spacing: 16) {
             VStack(alignment: .leading) {
                 NavigationLink(value: NavigationRoute.citySelection(.from)) {
-                    cityTextView(placeholder: "Откуда", value: viewModel.from)
+                    cityTextView(placeholder: "Откуда", value: formModel.nameFrom)
                 }
                 NavigationLink(value: NavigationRoute.citySelection(.to)) {
-                    cityTextView(placeholder: "Куда", value: viewModel.to)
+                    cityTextView(placeholder: "Куда", value: formModel.nameTo)
                 }
             }
             .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 13))
             .frame(height: 96)
             .background(RoundedRectangle(cornerRadius: cornerRadius).fill(.ypWhiteUniversal))
-            Button(action: viewModel.swapFromTo) {
+            Button(action: formModel.swapFromTo) {
                 Image(systemName: "arrow.2.squarepath")
                     .foregroundStyle(.ypBlue)
                     .frame(width: 24, height: 24)
@@ -50,20 +72,9 @@ struct ScheduleView: View {
             }
             .frame(width: 36, height: 36)
         }
-        .padding(.all, 16)
+        .padding(16)
         .frame(height: 128)
         .background(RoundedRectangle(cornerRadius: cornerRadius).fill(.ypBlue))
-    }
-    
-    private var searchButton: some View {
-        NavigationLink(value: NavigationRoute.carriersList) {
-            Text("Найти")
-                .modifier(BoldSeventeen())
-                .frame(width: 150, height: 60)
-                .foregroundColor(.white)
-                .background(.ypBlue)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-        }
     }
     
     private func cityTextView(placeholder: String, value: String?) -> some View {
@@ -76,5 +87,6 @@ struct ScheduleView: View {
 }
 
 #Preview {
-    ScheduleView(searchParams: ScheduleSearchParams())
+    @Previewable @State var routeModel = RouteFormModel()
+    ScheduleView(formModel: $routeModel)
 }

@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct CarrierInfoView: View {
-    var carrier: CarrierListItem
+    let carrier: CarrierListItem
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
