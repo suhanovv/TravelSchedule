@@ -1,0 +1,76 @@
+//
+//  StationSelectionView.swift
+//  TravelSchedule
+//
+//  Created by Вадим Суханов on 07.09.2025.
+//
+
+import SwiftUI
+
+struct StationSelectionView: View {
+    let city: City
+    @Binding var path: NavigationPath
+    @Binding var selectedStation: Station?
+    @State private var viewModel = StationSelectionViewModel()
+    
+    var body: some View {
+        List {
+            ForEach(viewModel.filteredStations, id: \.id) { station in
+                HStack {
+                    Text(station.name)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }
+                .frame(height: 60)
+                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 18))
+                .tint(.ypBlack)
+                .listRowBackground(Color.clear)
+                .labelStyle(.titleOnly)
+                .listRowSeparator(.hidden)
+                .onTapGesture {
+                    selectedStation = station
+                    path.removeLast(path.count)
+                }
+            }
+        }
+        .overlay {
+            Text("Станция не найдена")
+                .modifier(BoldTwentyFour())
+                .foregroundColor(.ypBlack)
+                .opacity(viewModel.filteredStations.isEmpty ? 1 : 0)
+        }
+        .searchable(
+            text: $viewModel.searchStr,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "Введите запрос"
+        )
+        .background(.ypWhite)
+        .listStyle(.plain)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Выбор станции")
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button { path.removeLast() } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.ypBlack)
+                }
+            }
+        }
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .safeAreaInset(edge: .top) {
+            Color.clear
+                .frame(height: 0)
+                .background(.ypWhite)
+        }
+        .onAppear {
+            viewModel.loadStations(city: city)
+        }
+    }
+}
+
+#Preview {
+    @Previewable @State var path = NavigationPath()
+    @Previewable @State var selectedStation: Station?
+    StationSelectionView(city: City(id: 1, name: "Test"), path: $path, selectedStation: $selectedStation)
+}
