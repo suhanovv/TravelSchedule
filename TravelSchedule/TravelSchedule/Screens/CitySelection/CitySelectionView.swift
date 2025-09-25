@@ -17,24 +17,10 @@ struct CitySelectionView: View {
     var body: some View {
         List {
             ForEach(viewModel.filteredCities) { city in
-                ZStack {
-                    HStack {
-                        Text(city.name)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                    }
-                    .onTapGesture {
-                        isSearch = false
-                        path.append(NavigationRoute.stationSelection(
-                            routeDirectionType, city))
-                    }
+                CityAndStationCollectionItemView(text: city.name) {
+                    isSearch = false
+                    path.append(NavigationRoute.stationSelection(routeDirectionType, city))
                 }
-                .frame(height: 60)
-                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 18))
-                .tint(.ypBlack)
-                .listRowBackground(Color.clear)
-                .labelStyle(.titleOnly)
-                .listRowSeparator(.hidden)
             }
         }
         .overlay {
@@ -55,12 +41,7 @@ struct CitySelectionView: View {
         .navigationTitle("Выбор города")
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action:{ path.removeLast() }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.ypBlack)
-                }
-            }
+            CustomBackToolbalView()
         }
         .toolbarBackground(Color.ypWhite, for: .navigationBar)
         .onAppear {

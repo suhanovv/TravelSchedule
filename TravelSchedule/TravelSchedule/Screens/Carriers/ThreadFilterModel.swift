@@ -19,14 +19,14 @@ enum WithTransitionsOption: String, CaseIterable {
     case no = "Нет"
 }
 
-@Observable final class CarriersFilterModel: Equatable {
+@Observable final class ThreadFilterModel: Equatable {
     var selectedTimes: Set<TimeFilterType> = []
     var selectedTransitions: WithTransitionsOption?
     var isAnyFilterActive: Bool {
         !selectedTimes.isEmpty || selectedTransitions != nil
     }
     
-    static func == (lhs: CarriersFilterModel, rhs: CarriersFilterModel) -> Bool {
+    static func == (lhs: ThreadFilterModel, rhs: ThreadFilterModel) -> Bool {
         lhs.selectedTimes == rhs.selectedTimes &&
         lhs.selectedTransitions == rhs.selectedTransitions
     }

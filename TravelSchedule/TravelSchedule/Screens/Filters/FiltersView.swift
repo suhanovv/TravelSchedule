@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct FiltersView: View {
-    @Binding var filterModel: CarriersFilterModel
-    @State private var localFilterModel: CarriersFilterModel = .init()
+    @Binding var filterModel: ThreadFilterModel
+    @State private var localFilterModel: ThreadFilterModel = .init()
     @State private var viewModel: FiltersViewModel = .init()
     @Environment(\.dismiss) private var dismiss
 
@@ -32,12 +32,7 @@ struct FiltersView: View {
         .background(.ypWhite)
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.ypBlack)
-                }
-            }
+            CustomBackToolbalView()
         }
         .onAppear {
             localFilterModel.selectedTimes = filterModel.selectedTimes
@@ -104,6 +99,6 @@ struct FiltersView: View {
 }
 
 #Preview {
-    @Previewable @State var model = CarriersFilterModel()
+    @Previewable @State var model = ThreadFilterModel()
     FiltersView(filterModel: $model)
 }

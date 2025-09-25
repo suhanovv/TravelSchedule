@@ -11,7 +11,7 @@ struct MainView: View {
     private let backgroundColor: Color = .ypWhite
     @State private var path = NavigationPath()
     @State private var routeModel: RouteFormModel = .init()
-    @State private var filterModel: CarriersFilterModel = .init()
+    @State private var filterModel: ThreadFilterModel = .init()
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -35,9 +35,15 @@ struct MainView: View {
                             selectedStation: directionType == .from ? $routeModel.from : $routeModel.to
                         )
                         
-                    case .carriersList(let from, let to): CarriersListView(from: from, to: to, filterModel: $filterModel)
+                    case .carriersList(let from, let to): ThreadsListView(
+                        from: from,
+                        to: to,
+                        filterModel: $filterModel,
+                        path: $path
+                    )
                     case .carrierInfo(let carrier): CarrierInfoView(carrier: carrier)
                     case .filterScreen: FiltersView(filterModel: $filterModel)
+                    case .licenseScreen: OfertaView(path: $path)
                 }
             }
         }

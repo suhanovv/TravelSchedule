@@ -14,6 +14,7 @@
 
 /* Begin PBXFileReference section */
 		D7079B022E59DE1F004D680B /* TravelSchedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelSchedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D712C85D2E81CDEE0088FBE2 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -71,6 +72,7 @@
 		D7C17CB72E5DC04A00380E64 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D712C85D2E81CDEE0088FBE2 /* WebKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -89,7 +91,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				D7079B252E59E79F004D680B /* PBXTargetDependency */,
+				D7F425F62E858D52004F7A25 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				D7079B042E59DE1F004D680B /* TravelSchedule */,
@@ -166,9 +168,9 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D7079B252E59E79F004D680B /* PBXTargetDependency */ = {
+		D7F425F62E858D52004F7A25 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = D7079B242E59E79F004D680B /* OpenAPIGenerator */;
+			productRef = D7F425F52E858D52004F7A25 /* OpenAPIGenerator */;
 		};
 /* End PBXTargetDependency section */
 
@@ -441,15 +443,15 @@
 			package = D7079B182E59E45F004D680B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */;
 			productName = OpenAPIURLSession;
 		};
-		D7079B242E59E79F004D680B /* OpenAPIGenerator */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D7079B232E59E78C004D680B /* XCRemoteSwiftPackageReference "swift-openapi-generator" */;
-			productName = "plugin:OpenAPIGenerator";
-		};
 		D757317A2E70AF1800999C18 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D75731792E70AF1800999C18 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		D7F425F52E858D52004F7A25 /* OpenAPIGenerator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D7079B232E59E78C004D680B /* XCRemoteSwiftPackageReference "swift-openapi-generator" */;
+			productName = "plugin:OpenAPIGenerator";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
