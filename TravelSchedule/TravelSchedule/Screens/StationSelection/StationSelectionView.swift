@@ -16,18 +16,7 @@ struct StationSelectionView: View {
     var body: some View {
         List {
             ForEach(viewModel.filteredStations, id: \.id) { station in
-                HStack {
-                    Text(station.name)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                }
-                .frame(height: 60)
-                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 18))
-                .tint(.ypBlack)
-                .listRowBackground(Color.clear)
-                .labelStyle(.titleOnly)
-                .listRowSeparator(.hidden)
-                .onTapGesture {
+                CityAndStationCollectionItemView(text: station.name) {
                     selectedStation = station
                     path.removeLast(path.count)
                 }
@@ -50,12 +39,7 @@ struct StationSelectionView: View {
         .navigationTitle("Выбор станции")
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button { path.removeLast() } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.ypBlack)
-                }
-            }
+            CustomBackToolbarView()
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .top) {

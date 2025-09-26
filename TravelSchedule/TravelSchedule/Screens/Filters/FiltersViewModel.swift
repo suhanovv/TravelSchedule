@@ -8,7 +8,7 @@
 import Foundation
 
 @Observable final class FiltersViewModel {
-    func isFiltersChanged(localState: CarriersFilterModel, globalState: CarriersFilterModel) -> Bool {
+    func isFiltersChanged(localState: ThreadFilterModel, globalState: ThreadFilterModel) -> Bool {
         localState != globalState
     }
 }

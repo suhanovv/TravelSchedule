@@ -9,10 +9,17 @@ import Foundation
 
 import Combine
 
-struct CarrierListItem: Identifiable, Hashable {
-    let id: UUID
+struct CarrierInfo: Hashable {
+    let code: Int
     let name: String
     let logo: String
+    let email: String?
+    let phone: String?
+}
+
+struct ThreadListItem: Identifiable, Hashable {
+    let id: UUID
+    let carrierInfo: CarrierInfo
     let arrivalTime: Date
     let departureTime: Date
     let duration: Duration
@@ -36,8 +43,8 @@ struct CarrierListItem: Identifiable, Hashable {
     }
 }
 
-@Observable final class CarriersListViewModel {
-    private(set) var carriers: [CarrierListItem] = []
+@Observable final class ThreadListViewModel {
+    private(set) var threads: [ThreadListItem] = []
 
     
     func makeTitle(from: Station, to: Station) -> String {
@@ -45,11 +52,10 @@ struct CarrierListItem: Identifiable, Hashable {
     }
 
     func loadData(from: Station, to: Station) {
-        carriers = [
+        threads = [
             .init(
                 id: UUID(),
-                name: "Русская Авиакомпания",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg",
+                carrierInfo: CarrierInfo(code: 8565, name: "Русская Авиакомпания", logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg", email: "foo@bar.com", phone: ""),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),
@@ -58,8 +64,7 @@ struct CarrierListItem: Identifiable, Hashable {
                 ),
             .init(
                 id: UUID(),
-                name: "Аэрофлот",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg",
+                carrierInfo: CarrierInfo(code: 9144, name: "Победа", logo: "https://yastat.net/s3/rasp/media/data/company/logo/ru_2.png", email: nil, phone: ""),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),
@@ -68,8 +73,7 @@ struct CarrierListItem: Identifiable, Hashable {
             ),
             .init(
                 id: UUID(),
-                name: "Русская Авиакомпания",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg",
+                carrierInfo: CarrierInfo(code: 8565, name: "Россия", logo:  "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg", email: nil, phone: ""),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),
@@ -78,8 +82,7 @@ struct CarrierListItem: Identifiable, Hashable {
                 ),
             .init(
                 id: UUID(),
-                name: "Аэрофлот",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg",
+                carrierInfo: CarrierInfo(code: 8565, name: "Россия", logo:  "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg", email: nil, phone: ""),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),
@@ -88,8 +91,7 @@ struct CarrierListItem: Identifiable, Hashable {
             ),
             .init(
                 id: UUID(),
-                name: "Русская Авиакомпания",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg",
+                carrierInfo: CarrierInfo(code: 9144, name: "Победа", logo: "https://yastat.net/s3/rasp/media/data/company/logo/ru_2.png", email: "foo@bar.com", phone: "+7 (904) 329-12-34"),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),
@@ -98,8 +100,7 @@ struct CarrierListItem: Identifiable, Hashable {
                 ),
             .init(
                 id: UUID(),
-                name: "Аэрофлот",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg",
+                carrierInfo: CarrierInfo(code: 9144, name: "Победа", logo: "https://yastat.net/s3/rasp/media/data/company/logo/ru_2.png", email: nil, phone: ""),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),
@@ -108,8 +109,7 @@ struct CarrierListItem: Identifiable, Hashable {
             ),
             .init(
                 id: UUID(),
-                name: "Русская Авиакомпания",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg",
+                carrierInfo: CarrierInfo(code: 8565, name: "Россия", logo:  "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg", email: nil, phone: ""),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),
@@ -118,8 +118,7 @@ struct CarrierListItem: Identifiable, Hashable {
                 ),
             .init(
                 id: UUID(),
-                name: "Аэрофлот",
-                logo: "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg",
+                carrierInfo: CarrierInfo(code: 8565, name: "Россия", logo:  "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg", email: nil, phone: ""),
                 arrivalTime: Date(),
                 departureTime: Date(),
                 duration: .seconds(10000),

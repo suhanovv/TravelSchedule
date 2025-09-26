@@ -11,6 +11,7 @@ enum NavigationRoute: Hashable {
     case citySelection(RouteDirectionType)
     case stationSelection(RouteDirectionType, City)
     case carriersList(Station, Station)
-    case carrierInfo(CarrierListItem)
+    case carrierInfo(CarrierInfo)
     case filterScreen
+    case licenseScreen
 }

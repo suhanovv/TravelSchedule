@@ -28,11 +28,12 @@ import SwiftUI
 
 struct ScheduleView: View {
     private let cornerRadius: CGFloat = 20
+    @State private var viewModel = ScheduleViewModel()
     @Binding var formModel: RouteFormModel
     
     var body: some View {
         VStack(spacing: 16) {
-            Spacer()
+            StoriesPreview(cards: viewModel.storiesCards)
             selectRouteWidget
             if let from = formModel.from, let to = formModel.to {
                 NavigationLink(value: NavigationRoute.carriersList(from, to)) {

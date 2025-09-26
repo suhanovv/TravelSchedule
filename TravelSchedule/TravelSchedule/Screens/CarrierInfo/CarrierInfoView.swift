@@ -9,47 +9,40 @@ import SwiftUI
 import Kingfisher
 
 struct CarrierInfoView: View {
-    let carrier: CarrierListItem
+    let carrier: CarrierInfo
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(alignment: .leading) {
-            Spacer()
             KFImage.url(URL(string: carrier.logo))
                 .placeholder { ProgressView() }
                 .resizable()
                 .scaledToFit()
-                .frame(height: 104)
+                .frame(maxWidth: .infinity, maxHeight: 104)
             Text(carrier.name)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .modifier(BoldTwentyFour())
                 .foregroundStyle(.ypBlack)
+            if let email = carrier.email {
+                ContactView(contactName: "E-mail", contactValue: email)
+            }
+            if let phone = carrier.phone, !phone.isEmpty {
+                ContactView(contactName: "Телефон", contactValue: phone)
+            }
             Spacer()
         }
+        .padding(16)
         .frame(maxWidth: .infinity)
         .background(.ypWhite)
         .navigationBarTitle("Информация о перевозчике")
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.ypBlack)
-                }
-            }
+            CustomBackToolbarView()
         }
     }
 }
 
 #Preview {
-    @Previewable @State var carrier = CarrierListItem(
-        id: UUID(),
-        name: "Русская Авиакомпания",
-        logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg",
-        arrivalTime: Date(),
-        departureTime: Date(),
-        duration: .seconds(10000),
-        startDate: Date(),
-        transition: "С пересадкой в костроме"
-        )
+    @Previewable @State var carrier = CarrierInfo(code: 8565, name: "Русская Авиакомпания", logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg", email: nil, phone: "")
     CarrierInfoView(carrier: carrier)
 }

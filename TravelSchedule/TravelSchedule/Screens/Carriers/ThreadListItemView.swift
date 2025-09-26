@@ -8,13 +8,23 @@
 import SwiftUI
 import Kingfisher
 
-struct CarrierListItemView: View {
-    let carrier: CarrierListItem
+
+struct ThreadListItemView: View {
+    let thread: ThreadListItem
     
     var body: some View {
         VStack(alignment: .leading) {
-            topInfo
-            bottomInfo
+            TopInfoView(
+                logo: thread.carrierInfo.logo,
+                carrierName: thread.carrierInfo.name,
+                startDate: thread.formattedStartDate,
+                transition: thread.transition
+            )
+            BottomInfoView(
+                departureTime: thread.formattedDepartureTime,
+                duration: thread.formattedDuration,
+                arrivalTime: thread.formattedArrivalTime
+            )
         }
         .frame(height: 104)
         .background(Rectangle()
@@ -23,10 +33,17 @@ struct CarrierListItemView: View {
         )
         .background(.ypWhite)
     }
+}
+
+fileprivate struct TopInfoView: View {
+    let logo: String
+    let carrierName: String
+    let startDate: String
+    let transition: String?
     
-    private var topInfo: some View {
+    var body: some View {
         HStack {
-            KFImage.url(URL(string: carrier.logo))
+            KFImage.url(URL(string: logo))
                 .placeholder {
                     ProgressView()
                 }
@@ -36,15 +53,13 @@ struct CarrierListItemView: View {
                 .clipShape(.rect(cornerRadius: 12))
             VStack(alignment: .leading) {
                 HStack{
-                    Text(carrier.name).modifier(RegularSeventeen())
-                    
+                    Text(carrierName).modifier(RegularSeventeen())
                     Spacer()
-                    
-                    Text(carrier.formattedStartDate).modifier(RegularTwelve())
+                    Text(startDate).modifier(RegularTwelve())
                 }
                 .foregroundStyle(.ypBlackUniversal)
                 
-                if let transition = carrier.transition {
+                if let transition {
                     Text(transition)
                         .modifier(RegularTwelve())
                         .foregroundStyle(.ypRed)
@@ -54,22 +69,22 @@ struct CarrierListItemView: View {
         .frame(height: 38)
         .padding(EdgeInsets(top: 14, leading: 14, bottom: 0, trailing: 7))
     }
+}
+
+fileprivate struct BottomInfoView: View {
+    let departureTime: String
+    let duration: String
+    let arrivalTime: String
     
-    private var bottomInfo: some View {
+    var body: some View {
         HStack{
-            Text(carrier.formattedDepartureTime).modifier(RegularSeventeen())
+            Text(departureTime).modifier(RegularSeventeen())
             VStack { Divider().overlay(.ypGrey) }
-            
             Spacer()
-            
-            Text(carrier.formattedDuration).modifier(RegularTwelve())
-            
+            Text(duration).modifier(RegularTwelve())
             VStack { Divider().overlay(.ypGrey) }
-            
             Spacer()
-            
-            Text(carrier.formattedArrivalTime).modifier(RegularSeventeen())
-                
+            Text(arrivalTime).modifier(RegularSeventeen())
         }
         .foregroundStyle(.ypBlackUniversal)
         .frame(height: 48)
@@ -78,15 +93,20 @@ struct CarrierListItemView: View {
 }
 
 #Preview {
-    @Previewable @State var carrier = CarrierListItem(
+    @Previewable @State var carrier = ThreadListItem(
         id: UUID(),
-        name: "Русская Авиакомпания",
-        logo: "https://yastat.net/s3/rasp/media/data/company/logo/gazpr.jpg",
+        carrierInfo: CarrierInfo(
+            code: 8565,
+            name: "Россия",
+            logo:  "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg",
+            email: nil,
+            phone: ""
+        ),
         arrivalTime: Date(),
         departureTime: Date(),
         duration: .seconds(100000),
         startDate: Date(),
         transition: "С пересадкой в Костроме"
     )
-    CarrierListItemView(carrier: carrier)
+    ThreadListItemView(thread: carrier)
 }
