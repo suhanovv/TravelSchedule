@@ -32,7 +32,7 @@ struct FiltersView: View {
         .background(.ypWhite)
         .navigationBarBackButtonHidden()
         .toolbar {
-            CustomBackToolbalView()
+            CustomBackToolbarView()
         }
         .onAppear {
             localFilterModel.selectedTimes = filterModel.selectedTimes

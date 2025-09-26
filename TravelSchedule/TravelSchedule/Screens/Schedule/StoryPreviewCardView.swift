@@ -14,7 +14,7 @@ struct StoryPreviewCardView: View {
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Image(card.imagePriview)
+            Image(card.imagePreview)
                 .resizable()
                 .frame(width: 92, height: 140)
                 .clipShape(.rect(cornerRadius: cornerRadius))

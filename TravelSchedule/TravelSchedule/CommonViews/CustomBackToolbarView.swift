@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomBackToolbalView: ToolbarContent {
+struct CustomBackToolbarView: ToolbarContent {
     @Environment(\.dismiss) private var dismiss
     
     var body: some ToolbarContent {

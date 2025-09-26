@@ -39,7 +39,7 @@ struct StationSelectionView: View {
         .navigationTitle("Выбор станции")
         .navigationBarBackButtonHidden()
         .toolbar {
-            CustomBackToolbalView()
+            CustomBackToolbarView()
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .top) {

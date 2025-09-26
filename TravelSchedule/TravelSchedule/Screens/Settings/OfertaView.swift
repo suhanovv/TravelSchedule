@@ -25,14 +25,14 @@ struct OfertaView: View {
                         .modifier(RegularSeventeen())
                 }
             }
-            .padding([.top, .trailing, .leading], 16)
+            .padding([.top, .horizontal], 16)
         }
         .background(Color.ypWhite)
         .navigationTitle("Пользовательское соглашение")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {
-            CustomBackToolbalView()
+            CustomBackToolbarView()
         }
     }
 }

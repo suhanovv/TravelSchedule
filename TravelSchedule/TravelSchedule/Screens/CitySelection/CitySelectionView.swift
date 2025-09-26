@@ -41,7 +41,7 @@ struct CitySelectionView: View {
         .navigationTitle("Выбор города")
         .navigationBarBackButtonHidden()
         .toolbar {
-            CustomBackToolbalView()
+            CustomBackToolbarView()
         }
         .toolbarBackground(Color.ypWhite, for: .navigationBar)
         .onAppear {

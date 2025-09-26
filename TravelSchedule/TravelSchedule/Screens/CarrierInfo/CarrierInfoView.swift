@@ -18,7 +18,7 @@ struct CarrierInfoView: View {
                 .placeholder { ProgressView() }
                 .resizable()
                 .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: 104, alignment: .center)
+                .frame(maxWidth: .infinity, maxHeight: 104)
             Text(carrier.name)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .modifier(BoldTwentyFour())
@@ -37,7 +37,7 @@ struct CarrierInfoView: View {
         .navigationBarTitle("Информация о перевозчике")
         .navigationBarBackButtonHidden()
         .toolbar {
-            CustomBackToolbalView()
+            CustomBackToolbarView()
         }
     }
 }

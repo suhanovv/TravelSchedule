@@ -120,7 +120,7 @@ fileprivate struct OverlayTextView: View {
 
 #Preview {
     StoryView(
-        story: Story.oneStory,
+        story: Story.firstStory,
         storyIndex: 0,
         storyDidFinish: {},
         storyDidOpen: { _ in },

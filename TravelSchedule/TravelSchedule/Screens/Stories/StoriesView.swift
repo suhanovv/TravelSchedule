@@ -12,27 +12,27 @@ struct StoriesView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-            ZStack(alignment: .topTrailing) {
-                TabView(selection: $viewModel.currentStoryIndex) {
-                    ForEach(Array(viewModel.stories.enumerated()), id: \.element.id) { index, story in
-                        StoryView(
-                            story: story,
-                            storyIndex: index,
-                            storyDidFinish: didCurrentStoryFinished,
-                            storyDidOpen: { storyId in viewModel.storyDidOpen(storyId) },
-                            currentStoryIndex: $viewModel.currentStoryIndex,
-                        )
-                        .tag(index)
-                    }
+        ZStack(alignment: .topTrailing) {
+            TabView(selection: $viewModel.currentStoryIndex) {
+                ForEach(Array(viewModel.stories.enumerated()), id: \.element.id) { index, story in
+                    StoryView(
+                        story: story,
+                        storyIndex: index,
+                        storyDidFinish: didCurrentStoryFinished,
+                        storyDidOpen: { storyId in viewModel.storyDidOpen(storyId) },
+                        currentStoryIndex: $viewModel.currentStoryIndex,
+                    )
+                    .tag(index)
                 }
-                .ignoresSafeArea()
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                Button("", image: .close) {
-                    dismiss()
-                }
-                .padding(.top, 57)
-                .padding(.trailing, 12)
             }
+            .ignoresSafeArea()
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            Button("", image: .close) {
+                dismiss()
+            }
+            .padding(.top, 57)
+            .padding(.trailing, 12)
+        }
     }
     
     func didCurrentStoryFinished() {
@@ -74,5 +74,5 @@ extension StoriesView {
 }
 
 #Preview {
-    StoriesView(stories: Story.stabStories, currentStory: Story.oneStory) { _ in }
+    StoriesView(stories: Story.stabStories, currentStory: Story.firstStory) { _ in }
 }

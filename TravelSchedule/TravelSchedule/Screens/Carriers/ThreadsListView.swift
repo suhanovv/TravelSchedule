@@ -48,7 +48,7 @@ struct ThreadsListView: View {
         .background(.ypWhite)
         .navigationBarBackButtonHidden()
         .toolbar {
-            CustomBackToolbalView()
+            CustomBackToolbarView()
         }
         .onAppear {
             viewModel.loadData(from: from, to: to)
