@@ -12,11 +12,11 @@ import Foundation
 typealias AllStations = Components.Schemas.AllStationsResponse
 
 
-protocol StationsServiceProtocol {
+protocol StationsServiceProtocol: Sendable {
     func getAllStations() async throws -> AllStations
 }
 
-final class StationsService: StationsServiceProtocol {
+final class StationsService: StationsServiceProtocol, Sendable {
     private let client: APIProtocol
     private let jsonDecoder = JSONDecoder()
     

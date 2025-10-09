@@ -8,25 +8,24 @@
 import SwiftUI
 
 struct StationSelectionView: View {
-    let city: City
-    @Binding var path: NavigationPath
-    @Binding var selectedStation: Station?
-    @State private var viewModel = StationSelectionViewModel()
+    @Environment(Coordinator.self) private var coordinator
+    @State private var viewModel: ViewModel
     
     var body: some View {
         List {
             ForEach(viewModel.filteredStations, id: \.id) { station in
-                CityAndStationCollectionItemView(text: station.name) {
-                    selectedStation = station
-                    path.removeLast(path.count)
+                CityAndStationCollectionItemView(text: station.title) {
+                    viewModel.selectStation(station)
+                    coordinator.popToRoot()
                 }
             }
         }
         .overlay {
+            ProgressView().opacity(viewModel.progressBarVisible ? 1 : 0)
             Text("Станция не найдена")
                 .modifier(BoldTwentyFour())
                 .foregroundColor(.ypBlack)
-                .opacity(viewModel.filteredStations.isEmpty ? 1 : 0)
+                .opacity(viewModel.notFoundVisible ? 1 : 0)
         }
         .searchable(
             text: $viewModel.searchStr,
@@ -37,24 +36,19 @@ struct StationSelectionView: View {
         .listStyle(.plain)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Выбор станции")
-        .navigationBarBackButtonHidden()
+        
         .toolbar {
             CustomBackToolbarView()
         }
         .toolbarBackground(.hidden, for: .navigationBar)
-        .safeAreaInset(edge: .top) {
-            Color.clear
-                .frame(height: 0)
-                .background(.ypWhite)
-        }
-        .onAppear {
-            viewModel.loadStations(city: city)
+        .task {
+            await viewModel.loadStations()
         }
     }
+    
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
+    
 }
 
-#Preview {
-    @Previewable @State var path = NavigationPath()
-    @Previewable @State var selectedStation: Station?
-    StationSelectionView(city: City(id: 1, name: "Test"), path: $path, selectedStation: $selectedStation)
-}

@@ -8,50 +8,23 @@
 import SwiftUI
 
 struct MainView: View {
-    private let backgroundColor: Color = .ypWhite
-    @State private var path = NavigationPath()
-    @State private var routeModel: RouteFormModel = .init()
-    @State private var filterModel: ThreadFilterModel = .init()
-    
+    @Environment(Coordinator.self) private var coordinator
+
     var body: some View {
-        NavigationStack(path: $path) {
+
             TabView() {
                 Group {
                     scheduleTabView
                     settingsTabView
                 }
-                .background(backgroundColor)
+                .background(.ypWhite)
             }
             .tint(.ypBlack)
-            .navigationDestination(for: NavigationRoute.self) { screen in
-                switch screen {
-                    case .citySelection(let directionType):
-                        CitySelectionView(routeDirectionType: directionType, path: $path)
-                        
-                    case .stationSelection(let directionType, let city):
-                        StationSelectionView(
-                            city: city,
-                            path: $path,
-                            selectedStation: directionType == .from ? $routeModel.from : $routeModel.to
-                        )
-                        
-                    case .carriersList(let from, let to): ThreadsListView(
-                        from: from,
-                        to: to,
-                        filterModel: $filterModel,
-                        path: $path
-                    )
-                    case .carrierInfo(let carrier): CarrierInfoView(carrier: carrier)
-                    case .filterScreen: FiltersView(filterModel: $filterModel)
-                    case .licenseScreen: OfertaView(path: $path)
-                }
-            }
-        }
     }
     
     private var scheduleTabView: some View {
         VStack {
-            ScheduleView(formModel: $routeModel)
+            coordinator.build(page: .schedule)
             Spacer()
             Divider()
         }
@@ -61,7 +34,7 @@ struct MainView: View {
     }
     private var settingsTabView: some View {
         VStack {
-            SettingsView()
+            coordinator.build(page: .settings)
             Spacer()
             Divider()
         }

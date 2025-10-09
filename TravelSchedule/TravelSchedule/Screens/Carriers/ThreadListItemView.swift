@@ -18,12 +18,12 @@ struct ThreadListItemView: View {
                 logo: thread.carrierInfo.logo,
                 carrierName: thread.carrierInfo.name,
                 startDate: thread.formattedStartDate,
-                transition: thread.transition
+                hasTransition: thread.hasTransition
             )
             BottomInfoView(
-                departureTime: thread.formattedDepartureTime,
+                departureTime: thread.departureTime,
                 duration: thread.formattedDuration,
-                arrivalTime: thread.formattedArrivalTime
+                arrivalTime: thread.arrivalTime
             )
         }
         .frame(height: 104)
@@ -36,21 +36,23 @@ struct ThreadListItemView: View {
 }
 
 fileprivate struct TopInfoView: View {
-    let logo: String
+    let logo: String?
     let carrierName: String
     let startDate: String
-    let transition: String?
+    let hasTransition: Bool
     
     var body: some View {
         HStack {
-            KFImage.url(URL(string: logo))
-                .placeholder {
-                    ProgressView()
-                }
-                .resizable()
-                .scaledToFit()
-                .frame(width: 38, height: 38)
-                .clipShape(.rect(cornerRadius: 12))
+            if let logo {
+                KFImage.url(URL(string: logo))
+                    .placeholder {
+                        ProgressView()
+                    }
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 38, height: 38)
+                    .clipShape(.rect(cornerRadius: 12))
+            }
             VStack(alignment: .leading) {
                 HStack{
                     Text(carrierName).modifier(RegularSeventeen())
@@ -59,8 +61,8 @@ fileprivate struct TopInfoView: View {
                 }
                 .foregroundStyle(.ypBlackUniversal)
                 
-                if let transition {
-                    Text(transition)
+                if hasTransition {
+                    Text("С пересадкой")
                         .modifier(RegularTwelve())
                         .foregroundStyle(.ypRed)
                 }
@@ -90,23 +92,4 @@ fileprivate struct BottomInfoView: View {
         .frame(height: 48)
         .padding(EdgeInsets(top: 0, leading: 14, bottom: 0, trailing: 14))
     }
-}
-
-#Preview {
-    @Previewable @State var carrier = ThreadListItem(
-        id: UUID(),
-        carrierInfo: CarrierInfo(
-            code: 8565,
-            name: "Россия",
-            logo:  "https://yastat.net/s3/rasp/media/data/company/logo/logorus_1.jpg",
-            email: nil,
-            phone: ""
-        ),
-        arrivalTime: Date(),
-        departureTime: Date(),
-        duration: .seconds(100000),
-        startDate: Date(),
-        transition: "С пересадкой в Костроме"
-    )
-    ThreadListItemView(thread: carrier)
 }

@@ -13,12 +13,12 @@ typealias Schedule = Components.Schemas.Segments
 typealias StationSchedule = Components.Schemas.ScheduleResponse
 
 
-protocol StationScheduleServiceProtocol {
-    func getScheduleBetweenStations(from: String, to: String, date: Date?) async throws -> Schedule
-    func getStationSchedule(station: String, date: Date?) async throws -> StationSchedule
+protocol StationScheduleServiceProtocol: Sendable {
+    func getScheduleBetweenStations(from: String, to: String, transfers: Bool) async throws -> Schedule
+    func getStationSchedule(station: String) async throws -> StationSchedule
 }
 
-final class StationScheduleService: StationScheduleServiceProtocol {
+final class StationScheduleService: StationScheduleServiceProtocol, Sendable {
 
     private let client: APIProtocol
     
@@ -26,21 +26,20 @@ final class StationScheduleService: StationScheduleServiceProtocol {
         self.client = client
     }
     
-    func getScheduleBetweenStations(from: String, to: String, date: Date?) async throws -> Schedule {
+    func getScheduleBetweenStations(from: String, to: String, transfers: Bool) async throws -> Schedule {
         let response = try await client.getScheduleBetweenStations(query: .init(
             from: from,
             to: to,
-            date: date?.ISO8601Format()
+            transfers: transfers
         ))
         
         return try response.ok.body.json
     }
 
-    func getStationSchedule(station: String, date: Date?) async throws -> StationSchedule {
+    func getStationSchedule(station: String) async throws -> StationSchedule {
         let response = try await client.getStationSchedule(query: .init(
             
-            station: station,
-            date: date?.ISO8601Format()
+            station: station
         ))
         
         return try response.ok.body.json
@@ -48,10 +47,7 @@ final class StationScheduleService: StationScheduleServiceProtocol {
 }
 
 extension StationScheduleServiceProtocol {
-    func getScheduleBetweenStations(from: String, to: String, date: Date? = nil) async throws -> Schedule {
-        try await getScheduleBetweenStations(from: from, to: to, date: date)
-    }
-    func getStationSchedule(station: String, date: Date? = nil) async throws -> StationSchedule {
-        try await getStationSchedule(station: station, date: date)
+    func getScheduleBetweenStations(from: String, to: String, transfers: Bool = false) async throws -> Schedule {
+        try await getScheduleBetweenStations(from: from, to: to, transfers: transfers)
     }
 }

@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ThreadFilterButton: View {
     let isAnyFilterActive: Bool
+    let action: () -> Void
     
     var body: some View {
-        NavigationLink(value: NavigationRoute.filterScreen) {
+        Button(action: action) {
             HStack(spacing: 4) {
                 Text("Уточнить время")
                     .modifier(BoldSeventeen())
@@ -31,5 +32,5 @@ struct ThreadFilterButton: View {
 }
 
 #Preview {
-    ThreadFilterButton(isAnyFilterActive: false)
+    ThreadFilterButton(isAnyFilterActive: false, action: {})
 }

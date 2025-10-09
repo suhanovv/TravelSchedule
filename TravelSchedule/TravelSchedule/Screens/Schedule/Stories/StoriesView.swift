@@ -35,16 +35,6 @@ struct StoriesView: View {
         }
     }
     
-    func didCurrentStoryFinished() {
-        switch viewModel.isLastStory {
-            case true: dismiss()
-            case false: withAnimation { viewModel.runNextStory() }
-        }
-    }
-}
-
-extension StoriesView {
-    
     init(stories: [Story], currentStory: Story,  storyDidOpen: @escaping (Int) -> Void) {
         viewModel = .init(
             stories: stories,
@@ -53,22 +43,10 @@ extension StoriesView {
         )
     }
     
-    @Observable final class ViewModel {
-        let stories: [Story]
-        var currentStoryIndex: Int
-        var storyDidOpen: (Int) -> Void
-        var isLastStory: Bool {
-            currentStoryIndex == stories.count - 1
-        }
-        
-        init(stories: [Story], currentStoryIndex: Int, storyDidOpen: @escaping (Int) -> Void) {
-            self.stories = stories
-            self.currentStoryIndex = currentStoryIndex
-            self.storyDidOpen = storyDidOpen
-        }
-        
-        func runNextStory() {
-            currentStoryIndex = min(currentStoryIndex + 1, stories.count - 1)
+    func didCurrentStoryFinished() {
+        switch viewModel.isLastStory {
+            case true: dismiss()
+            case false: withAnimation { viewModel.runNextStory() }
         }
     }
 }

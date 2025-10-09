@@ -10,15 +10,18 @@ import Kingfisher
 
 struct CarrierInfoView: View {
     let carrier: CarrierInfo
-    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(alignment: .leading) {
-            KFImage.url(URL(string: carrier.logo))
-                .placeholder { ProgressView() }
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: 104)
+            if let logo = carrier.logo {
+                KFImage.url(URL(string: logo))
+                    .placeholder { ProgressView() }
+                    .resizable()
+                    .roundCorner(radius: .heightFraction(0.2))
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: 104)
+            }
+                
             Text(carrier.name)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .modifier(BoldTwentyFour())
@@ -35,7 +38,7 @@ struct CarrierInfoView: View {
         .frame(maxWidth: .infinity)
         .background(.ypWhite)
         .navigationBarTitle("Информация о перевозчике")
-        .navigationBarBackButtonHidden()
+        
         .toolbar {
             CustomBackToolbarView()
         }
