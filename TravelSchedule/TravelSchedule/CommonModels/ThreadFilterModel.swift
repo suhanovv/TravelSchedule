@@ -12,6 +12,19 @@ enum TimeFilterType: String, CaseIterable {
     case day = "День 12:00 - 18:00"
     case evening = "Вечер 18:00 - 00:00"
     case night = "Ночь 00:00 - 06:00"
+    
+    var timeRange: ClosedRange<Int> {
+        switch self {
+            case .morning:
+                return 6...11
+            case .day:
+                return 12...17
+            case .evening:
+                return 18...23
+            case .night:
+                return 0...5
+        }
+    }
 }
 
 enum WithTransitionsOption: String, CaseIterable {
@@ -19,11 +32,17 @@ enum WithTransitionsOption: String, CaseIterable {
     case no = "Нет"
 }
 
-@Observable final class ThreadFilterModel: Equatable {
-    var selectedTimes: Set<TimeFilterType> = []
+@Observable
+final class ThreadFilterModel: Equatable {
+    var selectedTimes: Set<TimeFilterType>
     var selectedTransitions: WithTransitionsOption?
     var isAnyFilterActive: Bool {
         !selectedTimes.isEmpty || selectedTransitions != nil
+    }
+    
+    init(selectedTimes: Set<TimeFilterType> = [], selectedTransitions: WithTransitionsOption? = nil) {
+        self.selectedTimes = selectedTimes
+        self.selectedTransitions = selectedTransitions
     }
     
     static func == (lhs: ThreadFilterModel, rhs: ThreadFilterModel) -> Bool {

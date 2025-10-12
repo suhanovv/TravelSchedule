@@ -12,13 +12,12 @@ struct CityAndStationCollectionItemView: View {
     let onTap: () -> Void
     
     var body: some View {
-        HStack {
-            Text(text)
-            Spacer()
-            Image(systemName: "chevron.right")
-        }
-        .onTapGesture {
-            onTap()
+        Button(action: onTap) {
+            HStack {
+                Text(text)
+                Spacer()
+                Image(systemName: "chevron.right")
+            }
         }
         .frame(height: 60)
         .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 18))

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OfertaView: View {
-    @Binding var path: NavigationPath
+    @Environment(Coordinator.self) private var coordinator
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -30,7 +30,6 @@ struct OfertaView: View {
         .background(Color.ypWhite)
         .navigationTitle("Пользовательское соглашение")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
         .toolbar {
             CustomBackToolbarView()
         }
@@ -38,5 +37,5 @@ struct OfertaView: View {
 }
 
 #Preview {
-    OfertaView(path: .constant(NavigationPath()))
+    OfertaView()
 }

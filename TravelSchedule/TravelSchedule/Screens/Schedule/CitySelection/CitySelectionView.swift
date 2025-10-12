@@ -9,9 +9,8 @@ import SwiftUI
 
 
 struct CitySelectionView: View {
-    var routeDirectionType: RouteDirectionType
-    @Binding var path: NavigationPath
-    @State private var viewModel = CitySelectionViewModel()
+    @Environment(Coordinator.self) private var coordinator
+    @State private var viewModel: ViewModel
     @State private var isSearch: Bool = false
     
     var body: some View {
@@ -19,15 +18,16 @@ struct CitySelectionView: View {
             ForEach(viewModel.filteredCities) { city in
                 CityAndStationCollectionItemView(text: city.name) {
                     isSearch = false
-                    path.append(NavigationRoute.stationSelection(routeDirectionType, city))
+                    coordinator.push(.stationSelection(viewModel.routeDirectionType, city))
                 }
             }
         }
         .overlay {
+            ProgressView().opacity(viewModel.progressBarVisible ? 1 : 0)
             Text("Город не найден")
                 .modifier(BoldTwentyFour())
                 .foregroundColor(.ypBlack)
-                .opacity(viewModel.filteredCities.isEmpty ? 1 : 0)
+                .opacity(viewModel.notFoundVisible ? 1 : 0)
         }
         .searchable(
             text: $viewModel.searchStr,
@@ -39,18 +39,30 @@ struct CitySelectionView: View {
         .listStyle(.plain)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Выбор города")
-        .navigationBarBackButtonHidden()
+        
         .toolbar {
             CustomBackToolbarView()
         }
         .toolbarBackground(Color.ypWhite, for: .navigationBar)
-        .onAppear {
-            viewModel.loadCities()
+
+        .task {
+            await viewModel.loadCities()
+        }
+        .onChange(of: viewModel.viewState) { oldValue, newValue in
+            switch newValue {
+                case .error(let errorType): coordinator.presentFullCover(FullScreenCover.errorScreen(errorType))
+                default : break
+            }
+        }
+        .onChange(of: coordinator.fullScreenCover) { oldValue, newValue in
+            if oldValue != nil && newValue == nil {
+                Task { await viewModel.loadCities() }
+            }
         }
     }
-}
-
-#Preview {
-    @Previewable @State var path: NavigationPath = NavigationPath()
-    CitySelectionView(routeDirectionType: RouteDirectionType.from, path: $path)
+    
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
+    
 }

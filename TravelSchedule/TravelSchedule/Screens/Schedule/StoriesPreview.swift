@@ -38,35 +38,14 @@ struct StoriesPreview: View {
         .frame(height: 188)
         .scrollIndicators(.hidden)
     }
+    
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
 }
 
-extension StoriesPreview {
-    init(cards: [Story]) {
-        viewModel = ViewModel(cards: cards)
-    }
-    
-    @Observable final class ViewModel {
-        let cards: [Story]
-        var isStoryActive: Bool = false
-        var currentStoryIndex: Int = 0
-        var currentCard: Story?
-        private(set) var watchedCards: Set<Int> = []
-        
-        init(cards: [Story]) {
-            self.cards = cards
-        }
-        
-        func addWatchedCard(_ id: Int) {
-            watchedCards.insert(id)
-        }
-        
-        func isStoryWatched(_ card: Story) -> Bool {
-            watchedCards.contains(card.id)
-        }
-    }
-}
 
 #Preview {
-    StoriesPreview(cards: Story.stabStories)
+    StoriesPreview(viewModel: .init(cards: Story.stabStories))
 }
 

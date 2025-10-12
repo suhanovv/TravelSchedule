@@ -8,6 +8,7 @@
 import Foundation
 
 struct Station: Identifiable, Hashable {
-    let id: Int
-    let name: String
+    let id: String
+    let title: String
+    let city: City
 }

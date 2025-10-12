@@ -1,5 +1,5 @@
 //
-//  CarriersListView.swift
+//  ThreadsListView.swift
 //  TravelSchedule
 //
 //  Created by Вадим Суханов on 08.09.2025.
@@ -8,23 +8,21 @@
 import SwiftUI
 
 struct ThreadsListView: View {
-    let from: Station
-    let to: Station
-    @Binding var filterModel: ThreadFilterModel
-    @Binding var path: NavigationPath
-    @State private var viewModel: ThreadListViewModel = .init()
+    @Environment(Coordinator.self) private var coordinator
+    @State private var viewModel: ViewModel
+    
     
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 16) {
-                Text(viewModel.makeTitle(from: from, to: to))
+                Text(viewModel.title)
                     .modifier(BoldTwentyFour())
                     .foregroundStyle(.ypBlack)
                 
-                List(viewModel.threads, id: \.self) { thread in
+                List(viewModel.filteredThreads, id: \.self) { thread in
                     ThreadListItemView(thread: thread)
                         .onTapGesture {
-                            path.append(NavigationRoute.carrierInfo(thread.carrierInfo))
+                            coordinator.push(.carrierInfo(thread.carrierInfo))
                         }
                         .background(.ypWhite)
                         .listRowSeparator(.hidden)
@@ -36,34 +34,29 @@ struct ThreadsListView: View {
                 .scrollBounceBehavior(.basedOnSize)
             }
             
-            ThreadFilterButton(isAnyFilterActive: filterModel.isAnyFilterActive)
+            ThreadFilterButton(isAnyFilterActive: viewModel.isFilterActive) {
+                coordinator.push(.filterScreen)
+            }
         }
         .overlay {
+            ProgressView().opacity(viewModel.progressBarVisible ? 1 : 0)
             Text("Вариантов нет")
                 .modifier(BoldTwentyFour())
                 .foregroundColor(.ypBlack)
-                .opacity(viewModel.threads.isEmpty ? 1 : 0)
+                .opacity(viewModel.notFoundVisible ? 1 : 0)
         }
         .padding([.horizontal, .top], 16)
         .background(.ypWhite)
-        .navigationBarBackButtonHidden()
+        
         .toolbar {
             CustomBackToolbarView()
         }
-        .onAppear {
-            viewModel.loadData(from: from, to: to)
+        .task {
+            await viewModel.loadData()
         }
     }
-}
-
-#Preview {
     
-    @Previewable @State var filterModel: ThreadFilterModel = .init()
-    ThreadsListView(
-        from: Station(id: 1, name: "test"),
-        to: Station(id: 2, name: "test"),
-        filterModel: $filterModel,
-        path: .constant(NavigationPath())
-    )
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
 }
-

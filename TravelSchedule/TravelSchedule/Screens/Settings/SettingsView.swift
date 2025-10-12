@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("isDarkMode") private var isDarkMode = false
+    @State private var viewModel = ViewModel()
+    @Environment(Coordinator.self) private var coordinator
     
     var body: some View {
         VStack(alignment: .leading) {
-            Toggle(isOn: $isDarkMode) {
+            Toggle(isOn: $viewModel.isDarkMode) {
                 Text("Темная тема")
                     .modifier(RegularSeventeen())
                     .foregroundStyle(.ypBlack)
             }
             .tint(.ypBlue)
             .frame(height: 60)
-            NavigationLink(value: NavigationRoute.licenseScreen) {
+            Button(action: {coordinator.push(.licenseScreen)}) {
                 HStack {
                     Text("Пользовательское соглашение")
                         .modifier(RegularSeventeen())
@@ -41,6 +42,7 @@ struct SettingsView: View {
         .foregroundStyle(.ypBlack)
     }
 }
+
 
 #Preview {
     SettingsView()

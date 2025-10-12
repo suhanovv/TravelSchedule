@@ -14,9 +14,21 @@ extension Date {
         return formatter
     }()
     
+    static let hoursAndMinutesAndSecondFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
+    
     static let hoursAndMinutesFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+    
+    static let threadStartDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }()
     
@@ -27,4 +39,5 @@ extension Date {
     var hoursAndMinutesString: String {
         return Date.hoursAndMinutesFormatter.string(from: self)
     }
+    
 }

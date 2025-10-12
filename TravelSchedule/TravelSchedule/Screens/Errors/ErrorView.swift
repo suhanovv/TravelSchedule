@@ -28,6 +28,7 @@ enum ErrorType {
 
 struct ErrorView: View {
     var errorType: ErrorType
+    @Environment(Coordinator.self) private var coordinator
     
     var body: some View {
         VStack(spacing: 16) {
@@ -37,6 +38,9 @@ struct ErrorView: View {
             Text(errorType.localizedDescription)
                 .modifier(BoldTwentyFour())
                 .foregroundStyle(.ypBlack)
+        }
+        .onTapGesture {
+            coordinator.dismissFullCover()
         }
     }
 }
